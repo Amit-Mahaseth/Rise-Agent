@@ -11,6 +11,7 @@ __pycache__/
 .mypy_cache/
 backend/.venv/
 backend/data/chroma/
+backend/chroma_data/
 frontend/node_modules/
 frontend/dist/
 

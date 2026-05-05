@@ -1,0 +1,47 @@
+[
+  {
+    "id": "demo_001",
+    "name": "Rajesh Kumar",
+    "phone": "+919876543210",
+    "language": "hi-IN",
+    "personality": "skeptical",
+    "objections": ["already_with_broker", "trust_concern"],
+    "final_classification": "warm"
+  },
+  {
+    "id": "demo_002",
+    "name": "Priya Sharma",
+    "phone": "+919876543211",
+    "language": "en-IN",
+    "personality": "enthusiastic",
+    "objections": [],
+    "final_classification": "hot"
+  },
+  {
+    "id": "demo_003",
+    "name": "Karthik Rajan",
+    "phone": "+919876543212",
+    "language": "ta-IN",
+    "personality": "neutral",
+    "objections": ["no_contacts"],
+    "final_classification": "warm"
+  },
+  {
+    "id": "demo_004",
+    "name": "Meena Patil",
+    "phone": "+919876543213",
+    "language": "mr-IN",
+    "personality": "disengaged",
+    "objections": ["not_interested_now", "trust_concern", "client_issues"],
+    "final_classification": "cold"
+  },
+  {
+    "id": "demo_005",
+    "name": "Arjun Reddy",
+    "phone": "+919876543214",
+    "language": "te-IN",
+    "personality": "interested",
+    "objections": ["no_contacts"],
+    "final_classification": "hot"
+  }
+]

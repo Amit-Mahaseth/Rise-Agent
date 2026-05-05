@@ -1,2 +1,0 @@
-"""Voice provider clients."""
-

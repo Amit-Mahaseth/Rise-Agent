@@ -1,0 +1,50 @@
+RUPEEZY AUTHORIZED PERSON (AP) PROGRAM — TELECALLING SCRIPT
+============================================================
+
+OPENING (First 10 seconds — critical):
+"Hi {name}, this is a quick call from Rupeezy. I noticed you showed interest in our Authorized Person program. Do you have 2 minutes?"
+
+If YES → proceed to PITCH
+If BUSY → "No problem! When would be a good time to call back?"
+
+PITCH (Keep under 30 seconds):
+"Rupeezy's AP program lets you earn by referring clients to our SEBI-registered trading platform. Here's what makes it different:
+
+1. ZERO joining fee — you start free, no deposit needed
+2. 100% brokerage share — most brokers cap at 60-70%, we give you everything
+3. Daily payouts — not weekly, not monthly, DAILY
+4. RISE Portal — track all your referrals, earnings, and client activity in real time
+5. Full support — our team handles compliance, tech issues, and client onboarding
+
+You focus on relationships, we handle everything else."
+
+QUALIFICATION QUESTIONS:
+1. "Do you have experience in the stock market or financial services?"
+2. "Do you currently know people who trade or invest?"
+3. "What's your current profession?" (helps gauge network size)
+
+INTEREST SIGNALS TO LISTEN FOR:
+- Asks about earning potential → HIGH interest
+- Asks about joining process → HIGH interest
+- Asks about SEBI registration → MODERATE interest (trust verification)
+- Asks about support → MODERATE interest
+- Says "sounds interesting" / "tell me more" → HIGH interest
+- Says "I'll think about it" → LOW-MODERATE interest
+
+CLOSE (For interested leads):
+"Great! I can connect you with a Rupeezy Relationship Manager who'll walk you through the signup on the RISE Portal. It takes about 10 minutes and there's zero cost. Would you like me to set that up?"
+
+CLOSE (For uncertain leads):
+"No pressure at all. Can I send you the details on WhatsApp? You can review it at your convenience and reach out whenever you're ready."
+
+CLOSE (For disengaged leads):
+"I completely understand. Thank you for your time, {name}. If you ever want to explore this, Rupeezy is always here. Have a great day!"
+
+KEY FACTS:
+- Rupeezy is SEBI registered (Registration No: INZ000XXXXXX)
+- 5000+ active APs across India
+- Average AP earns ₹15,000-₹50,000/month
+- Top APs earn ₹2,00,000+/month
+- No minimum client requirement
+- Works part-time — great for students, professionals, retirees
+- RISE Portal: https://rise.rupeezy.in

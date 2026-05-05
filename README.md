@@ -1,43 +1,32 @@
 # RiseAgent AI
 
-RiseAgent AI is a production-oriented multilingual voice-agent system for Rupeezy. It instantly calls new leads, detects their language in real time, handles loan objections with a retrieval-backed conversation engine, classifies each lead as Hot/Warm/Cold, and routes the next action to sales or nurture workflows.
+Production-grade multilingual AI voice agent system for Rupeezy's Authorized Person (AP) lead conversion program. Automatically calls new leads, conducts multilingual sales conversations, handles objections with RAG-backed rebuttals, scores leads as Hot/Warm/Cold, and routes them to RM queue or WhatsApp follow-up.
 
-## What is included
+## Tech Stack
 
-- FastAPI backend with modular orchestration services
-- LangChain conversation engine with RAG over base scripts and FAQs
-- ChromaDB memory for per-lead, multi-call continuity
-- Rule-based scoring and classification with explainable breakdowns
-- Twilio adapters for outbound calling and WhatsApp follow-ups
-- React + Vite dashboard scaffold for funnel, summaries, and RM tracking
-- Architecture and setup docs for local development and production rollout
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | FastAPI, Uvicorn, Pydantic v2, Python 3.11+ |
+| **LLM** | Claude Sonnet (Anthropic) via LangChain |
+| **RAG** | ChromaDB + HuggingFace multilingual embeddings |
+| **Voice** | Sarvam AI (STT + TTS + Translate) |
+| **Phone** | Exotel / Twilio (configurable) |
+| **WhatsApp** | Meta Cloud API (Graph API v18.0) |
+| **Database** | Supabase (PostgreSQL) or in-memory for demo |
+| **Frontend** | React 18, Vite 5, Tailwind CSS 3, Recharts, TanStack Query, Zustand |
 
-## Monorepo layout
-
-```text
-.
-├── backend
-│   ├── app
-│   ├── data
-│   ├── tests
-│   └── pyproject.toml
-├── docs
-│   └── architecture.md
-└── frontend
-    └── src
-```
-
-## Quick start
+## Quick Start
 
 ### 1. Backend
 
 ```bash
 cd backend
-python -m venv .venv
-.venv\Scripts\activate
-pip install -e .
-copy .env.example .env
-uvicorn app.main:app --reload
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+# Add your ANTHROPIC_API_KEY to .env
+uvicorn main:app --reload
 ```
 
 ### 2. Frontend
@@ -45,35 +34,70 @@ uvicorn app.main:app --reload
 ```bash
 cd frontend
 npm install
-copy .env.example .env
 npm run dev
 ```
 
-### 3. Seed a lead
+### 3. Test Endpoints
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/leads ^
-  -H "Content-Type: application/json" ^
-  -d "{\"lead_id\":\"LD-1001\",\"full_name\":\"Priya Sharma\",\"phone_number\":\"+919999999999\",\"source\":\"landing-page\",\"product_interest\":\"personal-loan\",\"notes\":\"Asked for a callback about rate options\"}"
+# Health check
+curl http://localhost:8000/health
+
+# Create a single lead (triggers demo simulation)
+curl -X POST http://localhost:8000/leads/new \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Priya Sharma", "phone": "+919876543211", "source": "test"}'
+
+# Seed all 5 demo personas
+curl -X POST http://localhost:8000/leads/demo/seed
+
+# Get dashboard stats
+curl http://localhost:8000/dashboard/stats
+
+# List all leads
+curl http://localhost:8000/leads
+
+# Get RM queue
+curl http://localhost:8000/dashboard/rm-queue
 ```
 
-The backend will create the lead, queue the outbound call, and expose turn-processing endpoints that a telephony/media gateway can use.
+## Demo Mode
 
-## Core flow
+Set `DEMO_MODE=true` in `.env` (default). In demo mode:
 
-1. Lead is created via API.
-2. Orchestrator stores the lead and queues an outbound call.
-3. Telephony provider places the call and streams conversation turns to the backend.
-4. LangChain retrieves base script + FAQ + lead memory before generating the next response.
-5. The scoring engine classifies the lead as Hot/Warm/Cold.
-6. Hot leads are handed to a relationship manager, Warm leads get WhatsApp nurture, Cold leads go to re-engagement.
+- No real phone calls are made
+- Full conversation pipeline runs with Claude (real LLM calls)
+- Lead responses are simulated based on persona personality
+- Full scoring, memory, and routing work end-to-end
+- Dashboard updates in real-time
 
-## Environment files
+### Demo Personas
 
-- Backend: [backend/.env.example](backend/.env.example)
-- Frontend: [frontend/.env.example](frontend/.env.example)
+| Name | Language | Personality | Expected Result |
+|------|----------|-------------|----------------|
+| Rajesh Kumar | Hindi | Skeptical | Warm |
+| Priya Sharma | English | Enthusiastic | Hot |
+| Karthik Rajan | Tamil | Neutral | Warm |
+| Meena Patil | Marathi | Disengaged | Cold |
+| Arjun Reddy | Telugu | Interested | Hot |
 
-## Documentation
+## Architecture
 
-- Detailed architecture: [docs/architecture.md](docs/architecture.md)
+```
+POST /leads/new → Insert lead → Trigger call (background)
+                                      ↓
+                              [Demo] Simulate conversation
+                              [Prod] Exotel/Twilio outbound
+                                      ↓
+                              Voice loop: STT → LLM → TTS
+                                      ↓
+                              Objection detection + RAG rebuttal
+                                      ↓
+                              Score lead (Hot/Warm/Cold)
+                                      ↓
+                     Hot → RM Queue | Warm → WhatsApp | Cold → Re-engage
+```
 
+## Environment Variables
+
+See `backend/.env.example` for all required variables. In demo mode, only `ANTHROPIC_API_KEY` and `SARVAM_API_KEY` are required.
