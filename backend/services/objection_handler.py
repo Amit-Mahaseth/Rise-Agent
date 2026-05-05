@@ -9,9 +9,7 @@ from __future__ import annotations
 import logging
 from typing import Optional
 
-from langchain_anthropic import ChatAnthropic
-from langchain.schema import HumanMessage
-
+from services.llm import get_llm_response
 from config import get_settings
 from prompts.system_prompt import build_objection_classification_prompt
 from knowledge.loader import get_retriever
@@ -55,17 +53,13 @@ async def classify_objection(lead_text: str) -> str:
     Classify a lead's statement as an objection type.
     Returns one of the VALID_OBJECTIONS or 'none'.
     """
-    settings = get_settings()
     try:
-        llm = ChatAnthropic(
-            model="claude-sonnet-4-20250514",
-            anthropic_api_key=settings.anthropic_api_key,
-            max_tokens=50,
-            temperature=0.0,
-        )
         prompt = build_objection_classification_prompt(lead_text)
-        response = await llm.ainvoke([HumanMessage(content=prompt)])
-        classification = response.content.strip().lower().replace(" ", "_")
+        response_data = await get_llm_response(
+            system_prompt="You are a helpful assistant that classifies lead statements into predefined objection types.",
+            user_message=prompt
+        )
+        classification = response_data["text"].strip().lower().replace(" ", "_")
 
         if classification in VALID_OBJECTIONS:
             logger.info("Objection classified: %s", classification)

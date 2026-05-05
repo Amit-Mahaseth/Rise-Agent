@@ -8,11 +8,7 @@ from __future__ import annotations
 import logging
 from typing import Optional
 
-from langchain_anthropic import ChatAnthropic
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-from langchain.schema import HumanMessage, AIMessage, SystemMessage
-
+from services.llm import get_llm_response
 from config import get_settings
 from knowledge.loader import get_retriever
 from prompts.system_prompt import build_system_prompt
@@ -40,40 +36,14 @@ class ConversationSession:
         self.turn_count = 0
         self.transcript: list[dict] = []
 
-        settings = get_settings()
-
-        # Initialize Claude LLM
-        self.llm = ChatAnthropic(
-            model="claude-sonnet-4-20250514",
-            anthropic_api_key=settings.anthropic_api_key,
-            max_tokens=300,
-            temperature=0.7,
-        )
-
         # Build system prompt
         self.system_prompt = build_system_prompt(
             detected_language=language,
             lead_memory=lead_memory,
         )
 
-        # In-call conversation memory (turn-by-turn)
-        self.memory = ConversationBufferMemory(
-            memory_key="chat_history",
-            return_messages=True,
-            output_key="answer",
-        )
-
         # RAG retriever for AP knowledge base
         self.retriever = get_retriever(k=3)
-
-        # Conversational retrieval chain
-        self.chain = ConversationalRetrievalChain.from_llm(
-            llm=self.llm,
-            retriever=self.retriever,
-            memory=self.memory,
-            return_source_documents=False,
-            verbose=False,
-        )
 
         logger.info(
             "Conversation session created for lead %s [%s]",
@@ -91,17 +61,19 @@ class ConversationSession:
         )
 
         try:
-            messages = [
-                SystemMessage(content=self.system_prompt),
-                HumanMessage(content=opening_prompt),
-            ]
-            response = await self.llm.ainvoke(messages)
-            agent_text = response.content.strip()
+            response_data = await get_llm_response(
+                system_prompt=self.system_prompt,
+                user_message=opening_prompt,
+                call_id=self.lead_id
+            )
+            agent_text = response_data["text"].strip()
+            provider = response_data["provider"]
 
             self.transcript.append({
                 "turn": self.turn_count,
                 "speaker": "agent",
                 "text": agent_text,
+                "provider": provider
             })
 
             logger.info("Opening [turn %d]: %s", self.turn_count, agent_text[:80])
@@ -127,16 +99,39 @@ class ConversationSession:
         })
 
         try:
-            # Build the query with context
-            query = (
+            # 1. Retrieve RAG context
+            try:
+                docs = await self.retriever.ainvoke(lead_text)
+                context_text = "\\n".join(d.page_content for d in docs)
+            except Exception as e:
+                logger.warning(f"RAG retrieval failed: {e}")
+                context_text = ""
+
+            # 2. Build conversation history
+            history_lines = []
+            for entry in self.transcript[-5:]: # Last 5 turns
+                speaker = "Agent" if entry["speaker"] == "agent" else "Lead"
+                history_lines.append(f"{speaker}: {entry['text']}")
+            history_text = "\n".join(history_lines)
+
+            # 3. Build the combined user message
+            user_message = (
                 f"[System context: Language={self.language}, Turn={self.turn_count}, "
                 f"Lead name={self.lead_name}]\n"
+                f"Knowledge Base Context:\n{context_text}\n\n"
+                f"Conversation History:\n{history_text}\n\n"
                 f"Lead says: \"{lead_text}\"\n"
                 f"Respond as the sales agent in {self.language}."
             )
 
-            result = await self.chain.ainvoke({"question": query})
-            agent_text = result.get("answer", "").strip()
+            # 4. Get LLM response
+            response_data = await get_llm_response(
+                system_prompt=self.system_prompt,
+                user_message=user_message,
+                call_id=self.lead_id
+            )
+            agent_text = response_data["text"].strip()
+            provider = response_data["provider"]
 
             if not agent_text:
                 agent_text = "I understand. Let me tell you more about the program."
@@ -146,6 +141,7 @@ class ConversationSession:
                 "turn": self.turn_count,
                 "speaker": "agent",
                 "text": agent_text,
+                "provider": provider
             })
 
             logger.info("Turn %d agent: %s", self.turn_count, agent_text[:80])
@@ -180,20 +176,16 @@ class ConversationSession:
 
 
 async def generate_call_summary(transcript: str) -> str:
-    """Generate a 2-sentence summary of a completed call using Claude."""
+    """Generate a 2-sentence summary of a completed call using the LLM router."""
     from prompts.system_prompt import build_summary_prompt
 
-    settings = get_settings()
     try:
-        llm = ChatAnthropic(
-            model="claude-sonnet-4-20250514",
-            anthropic_api_key=settings.anthropic_api_key,
-            max_tokens=150,
-            temperature=0.3,
-        )
         prompt = build_summary_prompt(transcript)
-        response = await llm.ainvoke([HumanMessage(content=prompt)])
-        return response.content.strip()
+        response_data = await get_llm_response(
+            system_prompt="You are a helpful assistant that summarizes sales calls concisely.",
+            user_message=prompt
+        )
+        return response_data["text"].strip()
     except Exception as exc:
         logger.error("Summary generation failed: %s", exc)
         return "Call completed. Summary unavailable."

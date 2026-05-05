@@ -177,6 +177,7 @@ CREATE TABLE IF NOT EXISTS call_events (
   speaker text CHECK (speaker IN ('agent', 'lead')),
   text text,
   language text,
+  provider text,
   timestamp timestamptz DEFAULT now()
 );
 

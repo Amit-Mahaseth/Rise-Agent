@@ -8,9 +8,7 @@ from __future__ import annotations
 import logging
 import re
 
-from langchain_anthropic import ChatAnthropic
-from langchain.schema import HumanMessage
-
+from services.llm import get_llm_response
 from config import get_settings
 from prompts.system_prompt import build_tone_analysis_prompt
 from database import db_insert
@@ -155,18 +153,14 @@ def _detect_network_mention(transcript_lower: str) -> bool:
 
 
 async def _analyze_tone(transcript: str) -> int:
-    """Use Claude to rate lead's engagement tone (0-2)."""
-    settings = get_settings()
+    """Use the LLM router to rate lead's engagement tone (0-2)."""
     try:
-        llm = ChatAnthropic(
-            model="claude-sonnet-4-20250514",
-            anthropic_api_key=settings.anthropic_api_key,
-            max_tokens=10,
-            temperature=0.0,
-        )
         prompt = build_tone_analysis_prompt(transcript)
-        response = await llm.ainvoke([HumanMessage(content=prompt)])
-        tone_text = response.content.strip()
+        response_data = await get_llm_response(
+            system_prompt="You are a helpful assistant that analyzes call transcripts for lead engagement tone.",
+            user_message=prompt
+        )
+        tone_text = response_data["text"].strip()
 
         # Extract digit
         match = re.search(r"[012]", tone_text)

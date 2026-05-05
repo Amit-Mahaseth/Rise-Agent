@@ -13,8 +13,7 @@ import random
 from pathlib import Path
 from datetime import datetime, timezone
 
-from langchain_anthropic import ChatAnthropic
-from langchain.schema import HumanMessage
+from services.llm import get_llm_response
 
 from config import get_settings
 from database import db_insert, db_update
@@ -81,13 +80,8 @@ async def simulate_call(lead_id: str, persona: dict) -> dict:
     objection_tracker = ObjectionTracker()
     language_state = LanguageState(initial_hint=language_code)
 
-    # 5. LLM for simulating lead responses
-    lead_llm = ChatAnthropic(
-        model="claude-sonnet-4-20250514",
-        anthropic_api_key=settings.anthropic_api_key,
-        max_tokens=150,
-        temperature=0.8,
-    )
+    # 5. Language state
+    language_state = LanguageState(initial_hint=language_code)
 
     # 6. Run conversation loop
     # Determine number of turns based on personality
@@ -95,8 +89,11 @@ async def simulate_call(lead_id: str, persona: dict) -> dict:
     num_turns = max_turns.get(personality, 6)
 
     # Agent opening
+    # We don't get the provider from the get_opening() method directly right now,
+    # but we added it to session.transcript. We can pull it from there.
     agent_text = await session.get_opening()
-    await _log_event(call_id, 1, "agent", agent_text, language_code)
+    opening_provider = session.transcript[-1].get("provider", "unknown")
+    await _log_event(call_id, 1, "agent", agent_text, language_code, provider=opening_provider)
 
     interest_signals: list[str] = []
     all_events = [{"turn": 1, "speaker": "agent", "text": agent_text, "language": language_code}]
@@ -113,14 +110,19 @@ async def simulate_call(lead_id: str, persona: dict) -> dict:
             agent_message=agent_text,
         )
         try:
-            lead_resp = await lead_llm.ainvoke([HumanMessage(content=lead_prompt)])
-            lead_text = lead_resp.content.strip()
+            response_data = await get_llm_response(
+                system_prompt="You are simulating a lead in a sales call. Respond briefly and naturally.",
+                user_message=lead_prompt
+            )
+            lead_text = response_data["text"].strip()
+            lead_provider = response_data["provider"]
         except Exception as exc:
             logger.error("Lead simulation failed: %s", exc)
             lead_text = "Hmm, okay."
+            lead_provider = "none"
 
-        await _log_event(call_id, turn, "lead", lead_text, language_code)
-        all_events.append({"turn": turn, "speaker": "lead", "text": lead_text, "language": language_code})
+        await _log_event(call_id, turn, "lead", lead_text, language_code, provider=lead_provider)
+        all_events.append({"turn": turn, "speaker": "lead", "text": lead_text, "language": language_code, "provider": lead_provider})
 
         # Detect objections
         objection_type = await classify_objection(lead_text)
@@ -137,9 +139,10 @@ async def simulate_call(lead_id: str, persona: dict) -> dict:
 
         # Agent response
         agent_text = await session.process_turn(lead_text)
+        agent_provider = session.transcript[-1].get("provider", "unknown")
         turn_num = turn + 1
-        await _log_event(call_id, turn_num, "agent", agent_text, language_code)
-        all_events.append({"turn": turn_num, "speaker": "agent", "text": agent_text, "language": language_code})
+        await _log_event(call_id, turn_num, "agent", agent_text, language_code, provider=agent_provider)
+        all_events.append({"turn": turn_num, "speaker": "agent", "text": agent_text, "language": language_code, "provider": agent_provider})
 
         # Small delay for realism
         await asyncio.sleep(0.1)
@@ -216,16 +219,20 @@ async def simulate_call(lead_id: str, persona: dict) -> dict:
     }
 
 
-async def _log_event(call_id: str, turn: int, speaker: str, text: str, language: str) -> None:
+async def _log_event(call_id: str, turn: int, speaker: str, text: str, language: str, provider: str = None) -> None:
     """Log a conversation turn to the database."""
     try:
-        await db_insert("call_events", {
+        event_data = {
             "call_id": call_id,
             "turn_number": turn,
             "speaker": speaker,
             "text": text,
             "language": language,
             "timestamp": datetime.now(timezone.utc).isoformat(),
-        })
+        }
+        if provider:
+            event_data["provider"] = provider
+
+        await db_insert("call_events", event_data)
     except Exception as exc:
         logger.warning("Failed to log call event: %s", exc)

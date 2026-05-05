@@ -17,8 +17,9 @@ from pydantic import Field
 class Settings(BaseSettings):
     """Application settings loaded from environment / .env file."""
 
-    # ── Anthropic ────────────────────────────────────────────────
-    anthropic_api_key: str = Field(default="", alias="ANTHROPIC_API_KEY")
+    # ── LLMs ─────────────────────────────────────────────────────
+    groq_api_key: str = Field(default="", alias="GROQ_API_KEY")
+    gemini_api_key: str = Field(default="", alias="GEMINI_API_KEY")
 
     # ── Sarvam AI ────────────────────────────────────────────────
     sarvam_api_key: str = Field(default="", alias="SARVAM_API_KEY")
@@ -73,14 +74,17 @@ class Settings(BaseSettings):
         """Return list of missing but required env vars."""
         missing: list[str] = []
         if self.demo_mode:
-            # In demo mode we only need Anthropic + Sarvam
-            if not self.anthropic_api_key:
-                missing.append("ANTHROPIC_API_KEY")
+            # In demo mode we only need Groq + Gemini + Sarvam
+            if not self.groq_api_key:
+                missing.append("GROQ_API_KEY")
+            if not self.gemini_api_key:
+                missing.append("GEMINI_API_KEY")
             if not self.sarvam_api_key:
                 missing.append("SARVAM_API_KEY")
         else:
             required_fields = {
-                "ANTHROPIC_API_KEY": self.anthropic_api_key,
+                "GROQ_API_KEY": self.groq_api_key,
+                "GEMINI_API_KEY": self.gemini_api_key,
                 "SARVAM_API_KEY": self.sarvam_api_key,
                 "SUPABASE_URL": self.supabase_url,
                 "SUPABASE_SERVICE_KEY": self.supabase_service_key,
