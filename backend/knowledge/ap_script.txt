@@ -41,7 +41,7 @@ CLOSE (For disengaged leads):
 "I completely understand. Thank you for your time, {name}. If you ever want to explore this, Rupeezy is always here. Have a great day!"
 
 KEY FACTS:
-- Rupeezy is SEBI registered (Registration No: INZ000XXXXXX)
+- Rupeezy is SEBI registered (Registration No: INZ000208032)
 - 5000+ active APs across India
 - Average AP earns ₹15,000-₹50,000/month
 - Top APs earn ₹2,00,000+/month

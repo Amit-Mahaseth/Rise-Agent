@@ -76,11 +76,8 @@ async def simulate_call(lead_id: str, persona: dict) -> dict:
         lead_memory=lead_memory,
     )
 
-    # 4. Initialize objection tracker
+    # 4. Initialize objection tracker and language state
     objection_tracker = ObjectionTracker()
-    language_state = LanguageState(initial_hint=language_code)
-
-    # 5. Language state
     language_state = LanguageState(initial_hint=language_code)
 
     # 6. Run conversation loop

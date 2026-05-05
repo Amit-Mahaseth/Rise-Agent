@@ -19,6 +19,12 @@ async def send_followup_whatsapp(
     signup_link: str = "https://rise.rupeezy.in/signup",
 ) -> dict:
     settings = get_settings()
+
+    # Guard: never call real Meta API in demo mode
+    if settings.demo_mode:
+        logger.info("DEMO MODE: WhatsApp message skipped for %s (%s)", lead_name, lead_phone)
+        return {"lead_id": lead_id, "status": "demo_skipped", "reason": "demo_mode"}
+
     if not settings.whatsapp_token or not settings.whatsapp_phone_number_id:
         logger.warning("WhatsApp credentials not configured — skipping")
         return {"lead_id": lead_id, "status": "skipped", "reason": "no credentials"}

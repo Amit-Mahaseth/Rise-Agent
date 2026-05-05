@@ -35,6 +35,7 @@ class CallEventResponse(BaseModel):
     speaker: str  # 'agent' or 'lead'
     text: str
     language: Optional[str] = None
+    provider: Optional[str] = None
     timestamp: Optional[str] = None
 
 

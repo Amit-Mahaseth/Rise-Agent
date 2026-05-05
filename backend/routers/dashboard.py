@@ -53,6 +53,13 @@ async def get_dashboard_stats():
             "started_at": call.get("started_at"),
         })
 
+    # LLM provider usage breakdown
+    all_events = await db_select("call_events")
+    provider_counts = {}
+    for evt in all_events:
+        p = evt.get("provider", "unknown") or "unknown"
+        provider_counts[p] = provider_counts.get(p, 0) + 1
+
     return {
         "stats": {
             "total_leads": total,
@@ -74,6 +81,7 @@ async def get_dashboard_stats():
             "cold": cold,
             "pending": total - contacted,
         },
+        "provider_usage": provider_counts,
         "recent_calls": recent_with_info,
     }
 

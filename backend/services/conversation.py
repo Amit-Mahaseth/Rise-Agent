@@ -136,7 +136,6 @@ class ConversationSession:
             if not agent_text:
                 agent_text = "I understand. Let me tell you more about the program."
 
-            self.turn_count += 1
             self.transcript.append({
                 "turn": self.turn_count,
                 "speaker": "agent",
@@ -149,7 +148,6 @@ class ConversationSession:
         except Exception as exc:
             logger.error("Conversation turn error: %s", exc)
             fallback = "I appreciate your time. Let me share one more thing about the program."
-            self.turn_count += 1
             self.transcript.append({"turn": self.turn_count, "speaker": "agent", "text": fallback})
             return fallback
 

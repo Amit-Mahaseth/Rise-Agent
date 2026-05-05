@@ -1,4 +1,4 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { useDashboardStats, useSeedDemo } from '../hooks/useLeads';
 import StatsBar from '../components/StatsBar';
 import FunnelChart from '../components/FunnelChart';
@@ -26,9 +26,14 @@ export default function Dashboard() {
     );
   }
 
-  const { stats, funnel, distribution, recent_calls } = data || {};
+  const { stats, funnel, distribution, provider_usage, recent_calls } = data || {};
   const pieData = distribution
     ? Object.entries(distribution).filter(([,v]) => v > 0).map(([name, value]) => ({ name, value }))
+    : [];
+
+  const PROVIDER_COLORS = { groq: '#8b5cf6', gemini: '#06b6d4', none: '#6b7280', unknown: '#4b5563' };
+  const providerData = provider_usage
+    ? Object.entries(provider_usage).filter(([k]) => k !== 'unknown').map(([name, value]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), value, fill: PROVIDER_COLORS[name] || '#6b7280' }))
     : [];
 
   return (
@@ -109,7 +114,43 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Recent Calls */}
+      {/* LLM Provider Usage */}
+      <div className="card">
+        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+          LLM Provider Usage — Groq vs Gemini
+        </h3>
+        {providerData.length === 0 ? (
+          <p className="text-gray-600 text-center py-8">No LLM usage data yet</p>
+        ) : (
+          <div>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={providerData} layout="vertical" margin={{ left: 10, right: 30 }}>
+                <XAxis type="number" tick={{ fill: '#9ca3af', fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="name" tick={{ fill: '#d1d5db', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} width={70} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '12px' }}
+                  labelStyle={{ color: '#d1d5db' }}
+                  formatter={(value) => [`${value} turns`, 'Requests']}
+                />
+                <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={28}>
+                  {providerData.map((entry, idx) => (
+                    <Cell key={idx} fill={entry.fill} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+            <div className="flex justify-center gap-6 mt-2">
+              {providerData.map((entry) => (
+                <div key={entry.name} className="flex items-center gap-1.5 text-xs text-gray-400">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: entry.fill }} />
+                  {entry.name}: {entry.value} requests
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="card">
         <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
           Recent Calls
