@@ -28,7 +28,7 @@ class TwilioCallProvider(BaseCallProvider):
             )
 
         voice_url = (
-            f"{self.settings.public_base_url}{self.settings.api_prefix}/calls/twilio/voice"
+            f"{self.settings.public_base_url}{self.settings.api_prefix}/webhook/voice"
             f"?lead_id={lead_id}&call_id={call_id}"
         )
         status_callback = f"{self.settings.public_base_url}{self.settings.api_prefix}/calls/twilio/status"

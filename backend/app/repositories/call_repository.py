@@ -51,19 +51,21 @@ class CallRepository:
 
     def get_recent_summaries(self, db: Session, limit: int = 10) -> list[dict]:
         stmt = (
-            select(CallRecord, Lead.full_name)
+            select(CallRecord, Lead.full_name, Lead.status, Lead.score)
             .join(Lead, Lead.lead_id == CallRecord.lead_id)
             .order_by(desc(CallRecord.updated_at))
             .limit(limit)
         )
         rows = db.execute(stmt).all()
         items: list[dict] = []
-        for call, full_name in rows:
+        for call, full_name, lead_status, lead_score in rows:
             items.append(
                 {
                     "call_id": call.id,
                     "lead_id": call.lead_id,
                     "customer_name": full_name,
+                    "lead_status": lead_status,
+                    "lead_score": lead_score,
                     "classification": call.classification,
                     "language": call.detected_language,
                     "intent": call.intent,

@@ -13,6 +13,8 @@ class CallSummaryItem(BaseModel):
     call_id: str
     lead_id: str
     customer_name: str
+    lead_status: str | None = None
+    lead_score: float | None = None
     classification: str | None
     language: str | None
     intent: str | None

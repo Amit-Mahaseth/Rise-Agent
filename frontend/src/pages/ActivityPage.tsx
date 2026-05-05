@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
 
 import { ConsoleFrame } from "../components/layout/ConsoleFrame";
 import { AppShell } from "../components/layout/AppShell";
@@ -22,8 +23,9 @@ function formatWhen(index: number) {
 }
 
 export function ActivityPage() {
-  const { data, offlineMode } = useDashboardData();
+  const { data, offlineMode, liveTranscript, tuningDebug } = useDashboardData();
   const items = data.call_summaries;
+  const [showDebug, setShowDebug] = useState(false);
 
   return (
     <AppShell offlineMode={offlineMode} showMarketingHero={false}>
@@ -86,6 +88,45 @@ export function ActivityPage() {
                 </article>
               );
             })}
+          </section>
+
+          <section className="panel" style={{ marginTop: "16px" }} aria-label="Live call transcript">
+            <div className="panel-heading">
+              <h2>Live Call View</h2>
+              <span>Streaming transcript</span>
+            </div>
+            {items[0] ? (
+              <div className="summary-list">
+                {(liveTranscript[items[0].call_id] ?? ["Waiting for live speech..."]).map((line, idx) => (
+                  <div key={`${items[0].call_id}-${idx}`} className="summary-card">
+                    {line}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </section>
+
+          <section className="panel" style={{ marginTop: "16px" }} aria-label="Tuning debug">
+            <div className="panel-heading">
+              <h2>Tuning Debug</h2>
+              <button
+                type="button"
+                className="btn btn--secondary"
+                onClick={() => setShowDebug((v) => !v)}
+                style={{ padding: "6px 10px" }}
+              >
+                {showDebug ? "Hide" : "Show"}
+              </button>
+            </div>
+            {showDebug ? (
+              <div className="summary-list">
+                <div className="summary-card">
+                  <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                    {JSON.stringify(tuningDebug ?? { status: "waiting_for_debug_events" }, null, 2)}
+                  </pre>
+                </div>
+              </div>
+            ) : null}
           </section>
         </div>
       </ConsoleFrame>

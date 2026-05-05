@@ -110,9 +110,10 @@ export function AssetsPipelinePage() {
             <section className="workspace-panel workspace-panel--list">
               <div className="lead-table__head">
                 <span className="lead-table__hc">Borrower</span>
+                <span className="lead-table__hc">Status</span>
                 <span className="lead-table__hc">Class</span>
+                <span className="lead-table__hc">Score</span>
                 <span className="lead-table__hc">Lang</span>
-                <span className="lead-table__hc lead-table__hc--tar">Dur</span>
               </div>
               <div className="lead-table__body">
                 {leads.map((row) => {
@@ -134,8 +135,9 @@ export function AssetsPipelinePage() {
                         </span>
                       </span>
                       <span className={`lead-row__pill lead-row__pill--${tone}`}>{row.classification}</span>
+                      <span className="lead-row__muted">{row.lead_status || "new"}</span>
+                      <span className="lead-row__muted">{row.lead_score ?? 0}</span>
                       <span className="lead-row__muted">{row.language}</span>
-                      <span className="lead-row__tar muted">{formatDuration(row.duration_seconds)}</span>
                     </button>
                   );
                 })}
@@ -189,6 +191,7 @@ export function AssetsPipelinePage() {
                 </div>
 
                 <p className="detail-copy">{selected.summary}</p>
+                <p className="detail-copy muted">Last call duration: {formatDuration(selected.duration_seconds)}</p>
                 <dl className="detail-kv">
                   <div>
                     <dt>Intent</dt>

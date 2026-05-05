@@ -10,6 +10,8 @@ export type CallSummaryItem = {
   call_id: string;
   lead_id: string;
   customer_name: string;
+  lead_status: string | null;
+  lead_score: number | null;
   classification: string | null;
   language: string | null;
   intent: string | null;

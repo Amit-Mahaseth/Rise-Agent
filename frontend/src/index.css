@@ -862,7 +862,7 @@ a.btn.btn--ghost {
 
 .lead-table__head {
   display: grid;
-  grid-template-columns: 2fr 0.8fr 0.7fr 0.5fr;
+  grid-template-columns: 2fr 0.8fr 0.8fr 0.6fr 0.6fr;
   gap: 8px;
   padding: 12px 16px;
   font-size: 0.72rem;
@@ -885,7 +885,7 @@ a.btn.btn--ghost {
 
 .lead-row {
   display: grid;
-  grid-template-columns: 2fr 0.8fr 0.7fr 0.5fr;
+  grid-template-columns: 2fr 0.8fr 0.8fr 0.6fr 0.6fr;
   gap: 8px;
   align-items: center;
   padding: 12px 16px;

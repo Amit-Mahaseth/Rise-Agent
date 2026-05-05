@@ -16,8 +16,15 @@ class ChromaMemoryService:
         )
 
     def store_turn(self, *, lead_id: str, call_id: str, speaker: str, text: str) -> None:
+        # Production cost control: avoid persisting long raw transcripts.
+        # We keep only the most recent/salient chunk per turn.
+        max_chars = 280
+        safe_text = (text or "").strip()
+        if len(safe_text) > max_chars:
+            safe_text = safe_text[:max_chars].rsplit(" ", 1)[0] + "..."
+
         document = Document(
-            page_content=f"{speaker}: {text}",
+            page_content=f"{speaker}: {safe_text}",
             metadata={"lead_id": lead_id, "call_id": call_id, "speaker": speaker, "kind": "turn"},
         )
         self.vectorstore.add_documents([document])

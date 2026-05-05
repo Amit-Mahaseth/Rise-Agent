@@ -42,6 +42,7 @@ class Lead(Base):
     score: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
 
     # Language and communication preferences
+    language: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
     preferred_language: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
     communication_preference: Mapped[str] = mapped_column(String(20), default="voice")  # voice, whatsapp, sms
 

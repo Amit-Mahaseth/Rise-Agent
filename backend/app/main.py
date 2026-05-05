@@ -9,7 +9,7 @@ from app.core.dependencies import get_knowledge_base
 from app.core.logging import configure_logging
 from app.db.base import Base
 from app.db.session import engine
-from app.models import CallRecord, Lead  # noqa: F401
+from app.models import CallRecord, Lead, MemoryRecord  # noqa: F401
 
 
 @asynccontextmanager

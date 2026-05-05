@@ -126,6 +126,10 @@ class Settings(BaseSettings):
     LOG_FORMAT: str = "json"
     SENTRY_DSN: str | None = None
     ENABLE_METRICS: bool = True
+    enable_tuning_debug: bool = Field(default=False, alias="ENABLE_TUNING_DEBUG")
+
+    # Agent persona for voice tone.
+    agent_persona: str = Field(default="professional", alias="AGENT_PERSONA")
 
     # Auxiliary paths
     SCRIPTS_PATH: str = "./data/scripts"

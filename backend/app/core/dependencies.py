@@ -69,3 +69,37 @@ def get_orchestrator() -> Any:
         whatsapp_service=WhatsAppService(settings),
         handoff_service=HumanHandoffService(settings),
     )
+
+
+@lru_cache
+def get_realtime_call_service() -> Any:
+    from app.repositories.call_repository import CallRepository
+    from app.repositories.lead_repository import LeadRepository
+    from app.services.call_service import RealtimeCallService
+    from app.services.llm_service import LLMService
+    from app.services.memory_service import MemoryService
+    from app.services.messaging.whatsapp import WhatsAppService
+    from app.services.scoring_service_v2 import ScoringServiceV2
+    from app.services.stt_service import STTService
+    from app.services.telephony.twilio_provider import TwilioCallProvider
+    from app.services.tts_service import TTSService
+    from app.services.whatsapp_service_v2 import WhatsAppTemplateService
+
+    settings = get_app_settings()
+    from app.services.handoff import HumanHandoffService
+    handoff_service = HumanHandoffService(settings)
+    return RealtimeCallService(
+        session_factory=SessionLocal,
+        call_repository=CallRepository(),
+        lead_repository=LeadRepository(),
+        call_provider=TwilioCallProvider(settings),
+        agent_persona=settings.agent_persona,
+        enable_tuning_debug=settings.enable_tuning_debug,
+        stt_service=STTService(),
+        tts_service=TTSService(),
+        llm_service=LLMService(get_conversation_engine()),
+        memory_service=MemoryService(get_memory_service()),
+        scoring_service=ScoringServiceV2(),
+        whatsapp_service=WhatsAppTemplateService(WhatsAppService(settings)),
+        handoff_service=handoff_service,
+    )
