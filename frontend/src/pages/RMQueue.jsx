@@ -9,36 +9,34 @@ export default function RMQueue() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 px-1 pt-2">
       <div>
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
-          RM Queue
-        </h1>
+        <h1 className="text-3xl font-medium text-[#141416]">RM Queue</h1>
         <p className="text-sm text-gray-500 mt-1">Hot leads awaiting relationship manager action</p>
       </div>
 
       {isLoading ? (
         <div className="flex justify-center py-16">
-          <div className="animate-spin w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full" />
+          <div className="animate-spin w-8 h-8 border-2 border-[#141416] border-t-transparent rounded-full" />
         </div>
       ) : error ? (
-        <div className="card text-center py-10 text-red-400">Failed to load RM queue</div>
+        <div className="bg-white rounded-[2rem] p-10 text-center shadow-soft text-red-500">Failed to load RM queue</div>
       ) : !data?.queue?.length ? (
-        <div className="card text-center py-16">
+        <div className="bg-white rounded-[2rem] p-16 text-center shadow-soft">
           <p className="text-gray-500 text-lg">No hot leads in queue</p>
-          <p className="text-gray-600 text-sm mt-2">Hot leads will appear here after call scoring</p>
+          <p className="text-gray-400 text-sm mt-2">Hot leads will appear here after call scoring</p>
         </div>
       ) : (
-        <div className="card p-0 overflow-hidden">
+        <div className="bg-white rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-xs text-gray-500 uppercase tracking-wider border-b border-gray-800 bg-gray-900/50">
+                <tr className="text-xs text-gray-400 uppercase tracking-wider border-b border-gray-100 bg-gray-50/50">
                   <th className="text-left py-3 px-4">Lead</th>
                   <th className="text-left py-3 px-4">Phone</th>
                   <th className="text-left py-3 px-4">Score</th>
                   <th className="text-left py-3 px-4">Objections</th>
-                  <th className="text-left py-3 px-4">Time in Queue</th>
+                  <th className="text-left py-3 px-4">Time</th>
                   <th className="text-left py-3 px-4">Status</th>
                   <th className="text-left py-3 px-4">Actions</th>
                 </tr>
@@ -49,57 +47,49 @@ export default function RMQueue() {
                   const elapsed = queuedAt ? Math.round((Date.now() - queuedAt.getTime()) / 60000) : 0;
 
                   return (
-                    <tr key={item.id} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors">
+                    <tr key={item.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-xs font-bold">
+                          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-xs font-bold text-red-600">
                             {item.lead_name?.charAt(0)}
                           </div>
-                          <span className="font-medium">{item.lead_name}</span>
+                          <span className="font-medium text-[#141416]">{item.lead_name}</span>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-gray-400">{item.phone}</td>
+                      <td className="py-3 px-4 text-gray-500">{item.phone}</td>
                       <td className="py-3 px-4">
-                        <span className="badge-hot">{item.score}</span>
+                        <span className="bg-red-50 text-red-600 border border-red-200 text-xs px-2.5 py-1 rounded-full font-bold">
+                          🔥 {item.score}
+                        </span>
                       </td>
-                      <td className="py-3 px-4 text-gray-400 text-xs">
-                        {item.objections_raised?.join(', ') || 'None'}
-                      </td>
-                      <td className="py-3 px-4 text-gray-400">
-                        {elapsed < 60 ? `${elapsed}m` : `${Math.round(elapsed / 60)}h`}
-                      </td>
+                      <td className="py-3 px-4 text-gray-500 text-xs">{item.objections_raised?.join(', ') || 'None'}</td>
+                      <td className="py-3 px-4 text-gray-500">{elapsed < 60 ? `${elapsed}m` : `${Math.round(elapsed / 60)}h`}</td>
                       <td className="py-3 px-4">
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          item.rm_status === 'pending' ? 'bg-yellow-500/15 text-yellow-300' :
-                          item.rm_status === 'called' ? 'bg-blue-500/15 text-blue-300' :
-                          item.rm_status === 'converted' ? 'bg-emerald-500/15 text-emerald-300' :
-                          'bg-red-500/15 text-red-300'
+                        <span className={`text-xs px-2.5 py-1 rounded-full font-medium border ${
+                          item.rm_status === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-200' :
+                          item.rm_status === 'called' ? 'bg-blue-50 text-blue-600 border-blue-200' :
+                          item.rm_status === 'converted' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' :
+                          'bg-red-50 text-red-600 border-red-200'
                         }`}>{item.rm_status}</span>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex gap-1">
+                        <div className="flex gap-1.5">
                           {item.rm_status === 'pending' && (
                             <button
-                              className="text-xs px-2 py-1 bg-blue-600/20 text-blue-300 rounded-lg hover:bg-blue-600/30 transition"
+                              className="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition border border-blue-200 font-medium"
                               onClick={() => handleStatusChange(item.id, 'called')}
-                            >
-                              Mark Called
-                            </button>
+                            >Called</button>
                           )}
                           {(item.rm_status === 'pending' || item.rm_status === 'called') && (
                             <>
                               <button
-                                className="text-xs px-2 py-1 bg-emerald-600/20 text-emerald-300 rounded-lg hover:bg-emerald-600/30 transition"
+                                className="text-xs px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-full hover:bg-emerald-100 transition border border-emerald-200 font-medium"
                                 onClick={() => handleStatusChange(item.id, 'converted')}
-                              >
-                                Converted
-                              </button>
+                              >Won</button>
                               <button
-                                className="text-xs px-2 py-1 bg-red-600/20 text-red-300 rounded-lg hover:bg-red-600/30 transition"
+                                className="text-xs px-3 py-1.5 bg-red-50 text-red-600 rounded-full hover:bg-red-100 transition border border-red-200 font-medium"
                                 onClick={() => handleStatusChange(item.id, 'lost')}
-                              >
-                                Lost
-                              </button>
+                              >Lost</button>
                             </>
                           )}
                         </div>

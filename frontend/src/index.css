@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-gray-950 text-gray-100;
+    @apply bg-[#070b0a] text-gray-100;
   }
   ::-webkit-scrollbar {
     width: 6px;
@@ -54,4 +54,68 @@
   .glow-hot { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); }
   .glow-warm { box-shadow: 0 0 20px rgba(250, 204, 21, 0.15); }
   .glow-cold { box-shadow: 0 0 20px rgba(96, 165, 250, 0.15); }
+  .shadow-soft { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
+}
+
+/* Dashboard scrollbar (light theme) */
+.dashboard-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.dashboard-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dashboard-scroll::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+.dashboard-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ==========================================
+   Liquid Glass Card Styles
+   ========================================== */
+.liquid-glass-card {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.liquid-glass-border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* ==========================================
+   Landing Page Animation Overrides
+   ========================================== */
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.font-jakarta {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-serif {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
 }

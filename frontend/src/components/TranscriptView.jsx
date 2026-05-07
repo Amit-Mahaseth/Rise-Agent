@@ -1,6 +1,6 @@
 export default function TranscriptView({ events }) {
   if (!events || events.length === 0) {
-    return <p className="text-gray-500 text-sm italic">No transcript available.</p>;
+    return <p className="text-gray-400 text-sm italic">No transcript available.</p>;
   }
 
   return (
@@ -12,11 +12,11 @@ export default function TranscriptView({ events }) {
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed
                 ${isAgent
-                  ? 'bg-violet-600/15 text-violet-200 border border-violet-500/20 rounded-bl-md'
-                  : 'bg-gray-800 text-gray-200 border border-gray-700 rounded-br-md'
+                  ? 'bg-[#141416] text-white rounded-bl-md'
+                  : 'bg-[#EBF981] text-[#141416] rounded-br-md'
                 }`}
             >
-              <p className={`text-[10px] font-semibold uppercase tracking-wider mb-1 ${isAgent ? 'text-violet-400' : 'text-gray-500'}`}>
+              <p className={`text-[10px] font-semibold uppercase tracking-wider mb-1 ${isAgent ? 'text-gray-400' : 'text-[#141416]/60'}`}>
                 {isAgent ? '🤖 Agent' : '👤 Lead'} · Turn {ev.turn_number}
               </p>
               <p>{ev.text}</p>

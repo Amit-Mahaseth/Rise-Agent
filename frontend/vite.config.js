@@ -8,7 +8,6 @@ export default defineConfig({
     proxy: {
       '/leads': 'http://localhost:8000',
       '/calls': 'http://localhost:8000',
-      '/dashboard': 'http://localhost:8000',
       '/webhooks': 'http://localhost:8000',
       '/health': 'http://localhost:8000',
     },
