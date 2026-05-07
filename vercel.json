@@ -9,5 +9,10 @@
             "entrypoint": "backend",
             "routePrefix": "/_/backend"
         }
+    },
+    "functions": {
+        "backend/api/**/*.py": {
+            "runtime": "python3.11"
+        }
     }
 }
