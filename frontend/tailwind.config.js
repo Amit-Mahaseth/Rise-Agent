@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        primary: '#E1E0CC',
         hot: { DEFAULT: '#ef4444', light: '#fca5a5' },
         warm: { DEFAULT: '#facc15', light: '#fde68a' },
         cold: { DEFAULT: '#60a5fa', light: '#bfdbfe' },
@@ -23,6 +24,7 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
         serif: ['"Instrument Serif"', 'serif'],
+        almarai: ['Almarai', 'sans-serif'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',

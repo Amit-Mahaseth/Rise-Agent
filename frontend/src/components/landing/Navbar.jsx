@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const NAV_LINKS = [
-  { label: 'PROJECTS', href: '#projects' },
-  { label: 'BLOG', href: '#blog' },
-  { label: 'ABOUT', href: '#about' },
-  { label: 'RESUME', href: '#resume' },
+  { label: 'HOW IT WORKS', href: '#features' },
+  { label: 'FEATURES ', href: '#features' },
+  { label: 'GITHUB', href: 'https://github.com/anand-1109/RiseAgent', isRoute: true },
+  { label: 'ABOUT', href: '#about ' },
   { label: 'DASHBOARD', href: '/dashboard', isRoute: true },
 ];
 
@@ -20,10 +20,10 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center group-hover:bg-rise-green/20 transition-all duration-300">
+              <div className="w-5 h-5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center group-hover:bg-rise-green/20 transition-all duration-300">
                 <span className="text-rise-green font-bold text-sm">R</span>
               </div>
-              <span className="text-white font-bold text-lg tracking-tight">
+              <span className="text-white font-italic font-serif text-lg tracking-tight">
                 Rise<span className="text-rise-green">Agent</span>
               </span>
             </Link>

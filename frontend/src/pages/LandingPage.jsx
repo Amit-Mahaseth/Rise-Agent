@@ -1,113 +1,106 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import VideoBackground from '../components/landing/VideoBackground';
 import GridOverlay from '../components/landing/GridOverlay';
 import CentralGlow from '../components/landing/CentralGlow';
 import LiquidGlassCard from '../components/landing/LiquidGlassCard';
 import Navbar from '../components/landing/Navbar';
+import WordsPullUp from '../components/landing/WordsPullUp';
+import AboutSection from '../components/landing/AboutSection';
+import FeaturesSection from '../components/landing/FeaturesSection';
+import LenisProvider from '../components/landing/LenisProvider';
+
+const CUSTOM_EASE = [0.16, 1, 0.3, 1];
 
 export default function LandingPage() {
   return (
-    <div className="relative min-h-screen bg-[#070b0a] overflow-hidden">
-      {/* Background layers */}
-      <VideoBackground />
-      <GridOverlay />
-      <CentralGlow />
+    <LenisProvider>
+      <div className="bg-[#070b0a]">
 
-      {/* Navigation */}
-      <Navbar />
+        {/* ─── SECTION 1: HERO ─── */}
+        <section className="relative min-h-screen overflow-hidden">
+          {/* Background layers */}
+          <VideoBackground />
+          <GridOverlay />
+          <CentralGlow />
 
-      {/* Hero Section */}
-      <section className="relative z-10 min-h-screen flex flex-col items-start justify-center px-6 lg:px-0">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="max-w-3xl">
-            {/* Liquid Glass Card */}
-            <div className="mb-4 opacity-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <LiquidGlassCard />
-            </div>
+          {/* Navigation */}
+          <Navbar />
 
-            {/* Eyebrow */}
-            <div
-              className="opacity-0 animate-fade-in-up"
-              style={{ animationDelay: '0.4s' }}
-            >
-              <span className="font-jakarta font-bold text-[11px] uppercase tracking-[0.2em] text-rise-green">
-                Career-Ready Curriculum
-              </span>
-            </div>
+          {/* Bottom-positioned 12-col grid */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 lg:px-10 pb-8 sm:pb-12 md:pb-16">
+            <div className="max-w-[1600px] mx-auto grid grid-cols-12 gap-4 items-end">
 
-            {/* Main headline */}
-            <h1
-              className="mt-5 text-[40px] sm:text-[52px] md:text-[60px] lg:text-[72px] font-black uppercase leading-[0.95] tracking-tight text-white opacity-0 animate-fade-in-up"
-              style={{ animationDelay: '0.6s' }}
-            >
-              LAUNCH YOUR
-              <br />
-              CODING CAREER
-              <span className="text-rise-green">.</span>
-            </h1>
+              {/* Left 8 columns — Giant heading "Prisma" */}
+              <div className="col-span-12 lg:col-span-8">
+                {/* Liquid Glass Card floating above */}
+                <div className="mb-4 opacity-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                  <LiquidGlassCard />
+                </div>
 
-            {/* Description */}
-            <p
-              className="mt-6 text-[14px] leading-relaxed text-white/50 max-w-[512px] opacity-0 animate-fade-in-up"
-              style={{ animationDelay: '0.8s' }}
-            >
-              Master in-demand coding skills with project-based learning,
-              mentorship from industry professionals, and a curriculum designed
-              to get you hired at top tech companies.
-            </p>
-
-            {/* CTA Button */}
-            <div
-              className="mt-10 opacity-0 animate-fade-in-up"
-              style={{ animationDelay: '1s' }}
-            >
-              <Link
-                to="/dashboard"
-                className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-rise-green text-[#070b0a] font-bold text-[13px] uppercase tracking-wider rounded-full hover:bg-[#4ec28c] transition-all duration-300 hover:shadow-lg hover:shadow-rise-green/25 active:scale-[0.97]"
-              >
-                Get Started
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </div>
-
-            {/* Stats row */}
-            <div
-              className="mt-16 flex items-center gap-10 opacity-0 animate-fade-in-up"
-              style={{ animationDelay: '1.2s' }}
-            >
-              <div>
-                <p className="text-2xl font-bold text-white">50K+</p>
-                <p className="text-[11px] text-white/30 uppercase tracking-wider mt-1">
-                  Students Enrolled
-                </p>
+                <h1 className="text-[26vw] sm:text-[24vw] md:text-[22vw] lg:text-[20vw] xl:text-[19vw] 2xl:text-[20vw] font-medium leading-[0.85] tracking-[-0.07em] text-[#E1E0CC]">
+                  <WordsPullUp text="Rise.AI" showAsterisk />
+                </h1>
               </div>
-              <div className="w-px h-10 bg-white/10" />
-              <div>
-                <p className="text-2xl font-bold text-white">95%</p>
-                <p className="text-[11px] text-white/30 uppercase tracking-wider mt-1">
-                  Placement Rate
-                </p>
-              </div>
-              <div className="w-px h-10 bg-white/10 hidden sm:block" />
-              <div className="hidden sm:block">
-                <p className="text-2xl font-bold text-white">200+</p>
-                <p className="text-[11px] text-white/30 uppercase tracking-wider mt-1">
-                  Industry Mentors
-                </p>
+
+              {/* Right 4 columns — Description + CTA */}
+              <div className="col-span-12 lg:col-span-4 pb-2 lg:pb-4">
+                {/* Description */}
+                <motion.p
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.8, ease: CUSTOM_EASE }}
+                  className="text-primary/70 text-xs sm:text-sm md:text-base leading-[1.2] mb-6 sm:mb-8"
+                >
+                  82% of sales leads go cold before
+                  anyone picks up the phone.
+
+                  RiseAgent calls every lead within
+                  5 minutes — in their language,
+                  with the right answer, every time.
+
+                </motion.p>
+
+                {/* CTA Buttons */}
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.7, duration: 0.8, ease: CUSTOM_EASE }}
+                  className="flex flex-wrap items-center gap-3"
+                >
+                  <Link
+                    to="/dashboard"
+                    className="group inline-flex items-center gap-2 hover:gap-3 bg-primary rounded-full pl-5 sm:pl-6 pr-1.5 py-1.5 transition-all duration-300"
+                  >
+                    <span className="text-white font-medium text-sm sm:text-base">
+                      SEE IT LIVE 
+                    </span>
+                    <span className="bg-black rounded-full w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#E1E0CC]" />
+                    </span>
+                  </Link>
+                </motion.div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 opacity-0 animate-fade-in" style={{ animationDelay: '1.5s' }}>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-white/20">Scroll</span>
-          <div className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent" />
-        </div>
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 opacity-0 animate-fade-in hidden lg:flex" style={{ animationDelay: '1.5s' }}>
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/20">Scroll</span>
+              <div className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent" />
+            </div>
+          </div>
+        </section>
+
+        {/* ─── SECTION 2: ABOUT ─── */}
+        <AboutSection />
+
+        {/* ─── SECTION 3: FEATURES ─── */}
+        <FeaturesSection />
+
       </div>
-    </div>
+    </LenisProvider>
   );
 }
