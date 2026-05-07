@@ -4,11 +4,11 @@ pydantic==2.7.0
 pydantic-settings==2.3.0
 python-dotenv==1.0.1
 httpx>=0.26.0
-langchain==0.3.14
-langchain-core==0.3.51
-langchain-groq==0.2.4
-langchain-google-genai==2.0.10
-langchain-community==0.3.14
+langchain==0.3.7
+langchain-core==0.3.15
+langchain-groq==0.2.3
+langchain-google-genai==2.0.7
+langchain-community==0.3.7
 langchain-chroma==0.1.4
 google-generativeai>=0.7.0
 groq>=0.9.0
