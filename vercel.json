@@ -26,5 +26,10 @@
       "source": "/(.*)",
       "destination": "/frontend/$1"
     }
-  ]
+  ],
+  "functions": {
+    "backend/**/*.py": {
+      "runtime": "python3.11"
+    }
+  }
 }
