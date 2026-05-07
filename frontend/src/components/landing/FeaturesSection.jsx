@@ -53,7 +53,7 @@ export default function FeaturesSection() {
   ];
 
   return (
-    <section className="relative min-h-screen bg-black py-20 sm:py-28 md:py-36 px-4 sm:px-6 overflow-hidden">
+    <section id="features" className="relative min-h-screen bg-black py-20 sm:py-28 md:py-36 px-4 sm:px-6 overflow-hidden">
       {/* Noise overlay */}
       <div className="absolute inset-0 bg-noise opacity-[0.15] pointer-events-none" />
 
@@ -72,7 +72,7 @@ export default function FeaturesSection() {
           <FeatureCard index={0}>
             <div className="relative h-full min-h-[300px] lg:min-h-0 rounded-2xl overflow-hidden">
               <video
-                src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"
+                src="src/video/From KlickPin CF Rustic Summer Salad Recipes for Everyday Life - Pin-933230354039887527.mp4"
                 autoPlay
                 loop
                 muted
@@ -90,7 +90,7 @@ export default function FeaturesSection() {
           <FeatureCard index={1}>
             <div className="bg-[#212121] rounded-2xl p-5 sm:p-6 h-full flex flex-col gap-4">
               <img
-                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85"
+                src="https://i.pinimg.com/736x/07/08/33/070833bad9343eb0d263cf18f74c99eb.jpg"
                 alt="Storyboard icon"
                 className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover"
               />
@@ -114,7 +114,7 @@ export default function FeaturesSection() {
           <FeatureCard index={2}>
             <div className="bg-[#212121] rounded-2xl p-5 sm:p-6 h-full flex flex-col gap-4">
               <img
-                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171741_ed9845ab-f5b2-4018-8ce7-07cc01823522.png&w=1280&q=85"
+                src="https://i.pinimg.com/736x/44/d8/9d/44d89d8f40d6293191f0a73cf477d678.jpg"
                 alt="Critiques icon"
                 className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover"
               />
@@ -137,7 +137,7 @@ export default function FeaturesSection() {
           <FeatureCard index={3}>
             <div className="bg-[#212121] rounded-2xl p-5 sm:p-6 h-full flex flex-col gap-4">
               <img
-                src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85"
+                src="https://i.pinimg.com/1200x/7a/a2/49/7aa2494a1b9cca36ba5ce1c02e7c47b5.jpg"
                 alt="Immersion icon"
                 className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover"
               />

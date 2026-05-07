@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const NAV_LINKS = [
-  { label: 'HOW IT WORKS', href: '#features' },
   { label: 'FEATURES ', href: '#features' },
-  { label: 'GITHUB', href: 'https://github.com/anand-1109/RiseAgent', isRoute: true },
+  { label: 'GITHUB', href: 'https://github.com/Amit-Mahaseth/Rise-Agent.git', isRoute: true },
   { label: 'ABOUT', href: '#about ' },
   { label: 'DASHBOARD', href: '/dashboard', isRoute: true },
 ];
